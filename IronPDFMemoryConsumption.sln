@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30804.86
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IronPDFMemoryConsumption", "IronPDFMemoryConsumption\IronPDFMemoryConsumption.csproj", "{D45AEF4D-F411-4D44-BCA9-93F961F1F309}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D4211564-A638-4D25-B95C-E8EE15064434}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		README.md = README.md
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D45AEF4D-F411-4D44-BCA9-93F961F1F309}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D45AEF4D-F411-4D44-BCA9-93F961F1F309}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D45AEF4D-F411-4D44-BCA9-93F961F1F309}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D45AEF4D-F411-4D44-BCA9-93F961F1F309}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CA7509BB-1BE6-4D83-8CB2-7570ECC694FC}
+	EndGlobalSection
+EndGlobal
