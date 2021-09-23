@@ -25,13 +25,15 @@ namespace IronPDFMemoryConsumption
 				this.ShowMainMenu();
 				menuOption = Console.ReadLine();
 
-				Dictionary<String, Func<Boolean>> knownCommands = new Dictionary<String, Func<Boolean>>()
+				Dictionary<String, Func<Boolean>> knownCommands = new()
 				{
-				  { "1", () => this.PrintPdfFromFile(1) },
-				  { "2", () => this.PrintPdfFromFile(10) },
-				  { "3", () => this.PrintPdfFromJson(1) },
-				  { "4", () => this.PrintPdfFromJson(10) },
-				  { "99", () => this.ExitProgramm() },
+					{ "1", () => this.PrintPdfFromFile(1) },
+					{ "2", () => this.PrintPdfFromFile(10) },
+					{ "3", () => this.PrintPdfFromJson(1) },
+					{ "4", () => this.PrintPdfFromJson(10) },
+					{ "5", () => this.PrintPdfFromHtml(1) },
+					{ "6", () => this.PrintPdfFromHtml(10) },
+					{ "99", () => this.ExitProgramm() },
 				};
 
 				if (knownCommands.Any(x => x.Key == menuOption))
@@ -66,6 +68,8 @@ namespace IronPDFMemoryConsumption
 			Console.WriteLine("  2) Print 10 PDFs from Binary PDF File.");
 			Console.WriteLine("  3) Print a single PDF from JSON File with Base64 Data.");
 			Console.WriteLine("  4) Print 10 PDFs from JSON File with Base64 Data.");
+			Console.WriteLine("  5) Print a single PDF from HTML File.");
+			Console.WriteLine("  6) Print 10 PDFs from HTML File."); 
 			Console.WriteLine("  99) Quit");
 			Console.WriteLine("=================================================");
 		}
@@ -74,23 +78,15 @@ namespace IronPDFMemoryConsumption
 		{
 			Byte[] sourceBytes = File.ReadAllBytes("SamplePdf.pdf");
 
-			PrintPdfRequest printPdfRequest = new PrintPdfRequest()
+			PrintPdfRequest printPdfRequest = new()
 			{
+				PrintType = PrintType.FromBytes,
 				FileData = sourceBytes,
-				DocumentName = $"SamplePdf_Printed_{DateTime.UtcNow:yyyyMMddHHmmssffff}.pdf",
+				DocumentName = $"SamplePdf_Printed_FromFile.pdf",
 				PrinterName = "Microsoft Print to PDF"
 			};
 
-			using IServiceScope serviceScope = this.serviceProvider.CreateScope();
-			IPdfPrinter pdfPrinter = serviceScope.ServiceProvider.GetRequiredService<IPdfPrinter>();
-
-			for (Int32 i = 0; i < count; i++)
-			{
-				printPdfRequest.DocumentName = $"SamplePdf_Printed_{DateTime.UtcNow:yyyyMMddHHmmssffff}.pdf";
-				Console.Write($"Printig document {i + 1}/{count}.");
-				pdfPrinter.Print(printPdfRequest);
-				Console.WriteLine(" Done.");
-			}
+			this.PrintPdf(count, printPdfRequest);
 
 			Console.WriteLine("All documents have been printed. Press any key to return to the menu.");
 			return true;
@@ -99,8 +95,30 @@ namespace IronPDFMemoryConsumption
 		private Boolean PrintPdfFromJson(Int32 count)
 		{
 			PrintPdfRequest printPdfRequest = JsonConvert.DeserializeObject<PrintPdfRequest>(File.ReadAllText("SamplePdfAsJson.json"));
-			String baseFileName = Path.GetFileNameWithoutExtension(printPdfRequest.DocumentName);
 
+			this.PrintPdf(count, printPdfRequest);
+
+			Console.WriteLine("All documents have been printed. Press any key to return to the menu.");
+			return true;
+		}
+
+		private Boolean PrintPdfFromHtml(Int32 count)
+		{
+			PrintPdfRequest printPdfRequest = new()
+			{
+				PrintType = PrintType.FromHtml,
+				DocumentName = "SamplePdf_Printed_FromHtml.pdf",
+				PrinterName = "Microsoft Print to PDF"
+			};
+			this.PrintPdf(count, printPdfRequest);
+
+			Console.WriteLine("All documents have been printed. Press any key to return to the menu.");
+			return true;
+		}
+
+		private void PrintPdf(Int32 count, PrintPdfRequest printPdfRequest)
+		{
+			String baseFileName = Path.GetFileNameWithoutExtension(printPdfRequest.DocumentName);
 			using IServiceScope serviceScope = this.serviceProvider.CreateScope();
 			IPdfPrinter pdfPrinter = serviceScope.ServiceProvider.GetRequiredService<IPdfPrinter>();
 
@@ -111,9 +129,6 @@ namespace IronPDFMemoryConsumption
 				pdfPrinter.Print(printPdfRequest);
 				Console.WriteLine(" Done");
 			}
-
-			Console.WriteLine("All documents have been printed. Press any key to return to the menu.");
-			return true;
 		}
 
 		private void WriteOutInnerExceptions(Exception exception, Int32 level)
