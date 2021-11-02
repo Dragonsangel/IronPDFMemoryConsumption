@@ -11,4 +11,4 @@ Within the comparison you should see instances of `MemoryStream` equal to the nu
 
 This application will generate and store the printed PDFs in your "Documents" folder, so please remember to clean that up after reproducing the issue :D.
 
-Status: Memory leak present in IronPdf [2021.9.3737](https://www.nuget.org/packages/IronPdf/2021.9.3737)
+Status: Memory leak present in IronPdf [2021.11.4183](https://www.nuget.org/packages/IronPdf/2021.11.4183)
